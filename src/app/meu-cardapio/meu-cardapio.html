@@ -1,0 +1,74 @@
+<div class="meu-cardapio-container">
+  
+  <div class="header">
+    <h1>Meu Cardápio</h1>
+    <p>Visualize suas refeições organizadas por dia da semana</p>
+    <p class="refeicoes-planejadas">0/28 refeições planejadas</p> 
+  </div>
+
+  <div class="dias-semana">
+    <button
+      *ngFor="let dia of diasSemana"
+      (click)="selecionarDia(dia)"
+      [ngClass]="{ ativo: dia === diaSelecionado }"
+    >
+      {{ dia }}
+    </button>
+  </div>
+
+  <div class="dia-atual-container">
+    <h2 class="nome-dia">{{ diaSelecionado }}</h2>
+  </div>
+
+  <div class="refeicoes-grid" *ngIf="cardapioDoDia$ | async as refeicoesDia">
+    
+    <ng-container *ngFor="let periodoFixo of periodosDoDia">
+      
+      <div 
+        class="refeicao-card" 
+        *ngIf="refeicoesDia[periodoFixo.nome] as refeicaoAtual"
+      >
+        
+        <div class="refeicao-header">
+          <span class="icone">{{ refeicaoAtual.icone }}</span>
+          <span class="periodo-nome">{{ refeicaoAtual.nome }}</span>
+        </div>
+
+        <div class="refeicao-conteudo">
+          <h4 
+            class="prato" 
+            [ngClass]="{'adicionar-texto': refeicaoAtual.prato === 'Adicionar Refeição'}"
+          >
+            {{ refeicaoAtual.prato }}
+          </h4>
+
+          <div class="botoes">
+            <button 
+              class="btn-receita" 
+              (click)="verReceita(refeicaoAtual.prato)"
+              *ngIf="refeicaoAtual.prato !== 'Adicionar Refeição'"
+            >
+              Ver Receita
+            </button>
+            
+            <button 
+              class="btn-adicionar" 
+              (click)="adicionarRefeicao(refeicaoAtual.nome)"
+              *ngIf="refeicaoAtual.prato === 'Adicionar Refeição'"
+            >
+              Adicionar Refeição
+            </button>
+
+            <button 
+              class="btn-mudar" 
+              (click)="mudarRefeicao(refeicaoAtual.nome)"
+              *ngIf="refeicaoAtual.prato !== 'Adicionar Refeição'"
+            >
+              Mudar
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
